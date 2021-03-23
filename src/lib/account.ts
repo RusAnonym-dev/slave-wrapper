@@ -103,11 +103,4 @@ export default class Account {
 			}
 		}
 	}
-
-	public generateRandomSlave() {
-		return new Slave(
-			utils.number.getRandomInt(2000000000, 2147483647),
-			this.authorization,
-		);
-	}
 }
