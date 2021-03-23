@@ -32,9 +32,6 @@ export default class Slave {
 		fetter_to: new Date(0),
 	};
 
-	public chain: boolean = true;
-	public work: boolean = true;
-
 	constructor(id: number, authorization: string, data?: SlaveData) {
 		this.id = id;
 		this.authorization = authorization;
@@ -68,10 +65,6 @@ export default class Slave {
 		this.data.sale_price = response.sale_price;
 		this.data.fetter_price = response.fetter_price;
 		this.data.fetter_to = new Date(response.fetter_to * 1000);
-
-		if (this.chain === true && this.data.fetter_to < new Date()) {
-			await this.buyFetter();
-		}
 
 		return response;
 	}
