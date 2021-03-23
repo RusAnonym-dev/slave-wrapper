@@ -1,4 +1,4 @@
-import axios from "axios";
+import fetch from "node-fetch";
 
 import { AccountInfoResponse } from "./../types/account";
 import Slave from "./slave";
@@ -36,14 +36,16 @@ export default class Account {
 	}
 
 	public async updateInfo(): Promise<AccountInfoResponse> {
-		const accountInfo = (
-			await axios.get(
+		const accountInfo = (await (
+			await fetch(
 				"https://pixel.w84.vkforms.ru/HappySanta/slaves/1.0.0/start",
 				{
-					headers: {},
+					headers: {
+						authorization: this.authorization,
+					},
 				},
 			)
-		).data as AccountInfoResponse;
+		).json()) as AccountInfoResponse;
 
 		this.slaves = accountInfo.slaves.map((slave) => {
 			const tempSlave = new Slave(slave.id, this.authorization, {

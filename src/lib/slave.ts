@@ -1,4 +1,4 @@
-import axios from "axios";
+import fetch from "node-fetch";
 
 import {
 	GetResponse,
@@ -51,8 +51,8 @@ export default class Slave {
 	}
 
 	public async get(): Promise<GetResponse> {
-		const slaveInfo = (
-			await axios.get(
+		const response = (await (
+			await fetch(
 				`https://pixel.w84.vkforms.ru/HappySanta/slaves/1.0.0/user?id=${this.id}`,
 				{
 					headers: {
@@ -60,101 +60,102 @@ export default class Slave {
 					},
 				},
 			)
-		).data as GetResponse;
+		).json()) as GetResponse;
 
-		this.data.id = slaveInfo.id;
-		this.data.job = slaveInfo.job.name;
-		this.data.profit = slaveInfo.profit_per_min;
-		this.data.sale_price = slaveInfo.sale_price;
-		this.data.fetter_price = slaveInfo.fetter_price;
-		this.data.fetter_to = new Date(slaveInfo.fetter_to * 1000);
+		this.data.id = response.id;
+		this.data.job = response.job.name;
+		this.data.profit = response.profit_per_min;
+		this.data.sale_price = response.sale_price;
+		this.data.fetter_price = response.fetter_price;
+		this.data.fetter_to = new Date(response.fetter_to * 1000);
 
 		if (this.chain === true && this.data.fetter_to < new Date()) {
 			await this.buyFetter();
 		}
 
-		return slaveInfo;
+		return response;
 	}
 
 	public async buy(): Promise<BuyResponse> {
-		const data = (
-			await axios.post(
+		const response = await (
+			await fetch(
 				"https://pixel.w84.vkforms.ru/HappySanta/slaves/1.0.0/buySlave",
-				{
-					slave_id: this.id,
-				},
 				{
 					headers: {
 						authorization: this.authorization,
 					},
+					body: JSON.stringify({
+						slave_id: this.id,
+					}),
 				},
 			)
-		).data;
-		await this.get();
-		return data;
+		).json();
+		return response;
 	}
 
 	public async sell(): Promise<SellResponse> {
-		const data = (
-			await axios.post(
+		const response = await (
+			await fetch(
 				"https://pixel.w84.vkforms.ru/HappySanta/slaves/1.0.0/saleSlave",
-				{
-					slave_id: this.id,
-				},
 				{
 					headers: {
 						authorization: this.authorization,
 					},
+					body: JSON.stringify({
+						slave_id: this.id,
+					}),
 				},
 			)
-		).data as SellResponse;
-		return data;
+		).json();
+		return response;
 	}
 
 	public async buyFetter(): Promise<BuyFetterResponse> {
-		const data = (
-			await axios.post(
+		const response = (await (
+			await fetch(
 				"https://pixel.w84.vkforms.ru/HappySanta/slaves/1.0.0/buyFetter",
-				{
-					slave_id: this.id,
-				},
 				{
 					headers: {
 						authorization: this.authorization,
 					},
+					body: JSON.stringify({
+						slave_id: this.id,
+					}),
 				},
 			)
-		).data as BuyFetterResponse;
-		this.data.id = data.id;
-		this.data.job = data.job.name;
-		this.data.profit = data.profit_per_min;
-		this.data.sale_price = data.sale_price;
-		this.data.fetter_price = data.fetter_price;
-		this.data.fetter_to = new Date(data.fetter_to * 1000);
-		return data;
+		).json()) as BuyFetterResponse;
+
+		this.data.id = response.id;
+		this.data.job = response.job.name;
+		this.data.profit = response.profit_per_min;
+		this.data.sale_price = response.sale_price;
+		this.data.fetter_price = response.fetter_price;
+		this.data.fetter_to = new Date(response.fetter_to * 1000);
+		return response;
 	}
 
 	public async setJob(work = `work #${this.id}`): Promise<SetJobResponse> {
-		const data = (
-			await axios.post(
+		const response = (await (
+			await fetch(
 				"https://pixel.w84.vkforms.ru/HappySanta/slaves/1.0.0/jobSlave",
-				{
-					slave_id: this.id,
-					name: work,
-				},
 				{
 					headers: {
 						authorization: this.authorization,
 					},
+					body: JSON.stringify({
+						slave_id: this.id,
+						name: work,
+					}),
 				},
 			)
-		).data.slave as SetJobResponse;
-		this.data.id = data.id;
-		this.data.job = data.job.name;
-		this.data.profit = data.profit_per_min;
-		this.data.sale_price = data.sale_price;
-		this.data.fetter_price = data.fetter_price;
-		this.data.fetter_to = new Date(data.fetter_to * 1000);
-		return data;
+		).json()) as SetJobResponse;
+
+		this.data.id = response.id;
+		this.data.job = response.job.name;
+		this.data.profit = response.profit_per_min;
+		this.data.sale_price = response.sale_price;
+		this.data.fetter_price = response.fetter_price;
+		this.data.fetter_to = new Date(response.fetter_to * 1000);
+		return response;
 	}
 }
