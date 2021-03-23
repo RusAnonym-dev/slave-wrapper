@@ -1,5 +1,4 @@
 import axios from "axios";
-import * as utils from "rus-anonym-utils";
 
 import { AccountInfoResponse } from "./../types/account";
 import { sendLog } from "./logger";
