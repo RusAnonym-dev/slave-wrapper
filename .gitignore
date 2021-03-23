@@ -2,3 +2,4 @@
 /yarn.lock
 /dist
 /src/DB/config.json
+yarn-error.log

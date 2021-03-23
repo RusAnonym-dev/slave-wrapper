@@ -7,7 +7,6 @@ import {
 	BuyFetterResponse,
 	SetJobResponse,
 } from "./../types/slave";
-import { sendLog } from "./logger";
 
 interface SlaveData {
 	id: number;
@@ -92,12 +91,6 @@ export default class Slave {
 			)
 		).data;
 		await this.get();
-		sendLog(`Куплен раб @id${this.data.id}
-Работа: ${this.data.job}
-Доход: ${this.data.profit}
-Чистый доход: ${this.data.clear_profit}
-Стоимость цепи: ${this.data.fetter_price}
-Можно продать за ${this.data.fetter_price}`);
 		return data;
 	}
 
@@ -115,12 +108,6 @@ export default class Slave {
 				},
 			)
 		).data as SellResponse;
-		sendLog(`Продан раб @id${this.data.id}
-Работа: ${this.data.job}
-Доход: ${this.data.profit}
-Чистый доход: ${this.data.clear_profit}
-Стоимость цепи: ${this.data.fetter_price}
-Продан за ${this.data.fetter_price}`);
 		return data;
 	}
 
@@ -144,12 +131,6 @@ export default class Slave {
 		this.data.sale_price = data.sale_price;
 		this.data.fetter_price = data.fetter_price;
 		this.data.fetter_to = new Date(data.fetter_to * 1000);
-		sendLog(`Куплена цепь на @id${this.data.id}
-Работа: ${this.data.job}
-Доход: ${this.data.profit}
-Чистый доход: ${this.data.clear_profit}
-Стоимость цепи: ${this.data.fetter_price}
-Можно продать за ${this.data.sale_price}`);
 		return data;
 	}
 
@@ -174,13 +155,6 @@ export default class Slave {
 		this.data.sale_price = data.sale_price;
 		this.data.fetter_price = data.fetter_price;
 		this.data.fetter_to = new Date(data.fetter_to * 1000);
-		sendLog(`Установлена новая работа для @id${this.data.id}
-Работа: ${this.data.job}
-Новая работа: ${work}
-Доход: ${this.data.profit}
-Чистый доход: ${this.data.clear_profit}
-Стоимость цепи: ${this.data.fetter_price}
-Можно продать за ${this.data.fetter_price}`);
 		return data;
 	}
 }

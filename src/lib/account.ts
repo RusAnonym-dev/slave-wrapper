@@ -1,7 +1,6 @@
 import axios from "axios";
 
 import { AccountInfoResponse } from "./../types/account";
-import { sendLog } from "./logger";
 import Slave from "./slave";
 
 interface AccountParams {
@@ -78,28 +77,6 @@ export default class Account {
 			this.info.clearProfit = 0;
 			this.info.reservMoney = 0;
 		}
-
-		sendLog(`Обновил данные в ${new Date().toLocaleString()}
-Баланс: ${this.info.balance}
-Доход: ${this.info.profit}
-Чистый доход: ${this.info.clearProfit}
-Рабов: ${this.slaves.length}
-Резерв: ${this.info.reservMoney}
-
-Резерв заполнится примерно через ${Math.floor(
-			(this.info.reservMoney - this.info.balance) / this.info.clearProfit,
-		)} минут`);
 		return accountInfo;
-	}
-
-	public async checkSlaves() {
-		for (const slave of this.slaves) {
-			if (slave.chain === true && slave.data.fetter_to < new Date()) {
-				await slave.buyFetter();
-			}
-			if (slave.work === true && slave.data.job === "") {
-				await slave.setJob();
-			}
-		}
 	}
 }
