@@ -37,11 +37,11 @@ export default class Slave {
 		this.authorization = authorization;
 		if (data) {
 			this.data = data;
-			this.calculateProfit();
+			this.calculateClearProfit();
 		}
 	}
 
-	public calculateProfit(): number {
+	public calculateClearProfit(): number {
 		const clearProfit = this.data.profit - this.data.fetter_price / 120;
 		this.data.clear_profit = clearProfit;
 		return clearProfit;

@@ -53,7 +53,7 @@ export default class Account {
 
 		if (this.info.slaves.length > 0) {
 			this.info.clearProfit = this.info.slaves
-				.map((slave) => slave.calculateProfit())
+				.map((slave) => slave.calculateClearProfit())
 				.reduce((accumulator, currentValue) => accumulator + currentValue);
 
 			this.info.reservMoney = this.info.slaves
